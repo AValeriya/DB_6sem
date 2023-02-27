@@ -74,8 +74,8 @@ reward REAL;
 BEGIN
     IF month_reward<0 OR proceent<0 OR proceent>100 THEN RETURN 'ERROR';
     END IF;
-    reward := (1+(proceent/100))*12*month_reward;
-    RETURN ''||reward||'';
+    reward := proceent/100;
+    RETURN (1+proceent)*12*month_reward';
 END;
 
 SELECT yearly_salary(100, 10) from DUAL;
