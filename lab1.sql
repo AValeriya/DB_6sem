@@ -21,7 +21,7 @@ IS
     odd number (10);
 BEGIN
     SELECT count(*) INTO even FROM MyTable WHERE mod(val,2)=0;
-    SELECT count(*) INTO odd FROM MyTable WHERE mod(val,2)!=0;
+    SELECT count(*) INTO odd FROM MyTable WHERE mod(val,2)<>0;
     IF even>odd THEN RETURN 'TRUE';
     ELSIF even<odd THEN RETURN 'FALSE';
     ELSE RETURN 'EQUAL';
@@ -35,7 +35,7 @@ CREATE OR REPLACE FUNCTION gener_value (input_id IN number) RETURN VARCHAR IS
 BEGIN
     SELECT val INTO val_id FROM MyTable WHERE id = input_id;
     RETURN 'INSERT INTO MyTable(id,val) VALUES ('||input_id||','||val_id||');';
-    EXCEPTION WHEN NO_DATA_FOUND THEN RETURN 'Data not found'; 
+    EXCEPTION WHEN NO_DATA_FOUND THEN RETURN 'error'; 
 END;
 
 SELECT gener_value(3) from DUAL;
