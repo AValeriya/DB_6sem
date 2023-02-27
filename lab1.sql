@@ -6,7 +6,7 @@ CREATE TABLE MyTable
 DECLARE 
     value number := 0;
 BEGIN
-    WHILE value < 10000
+    WHILE value <= 9999
     LOOP
         value := value + 1;
         INSERT INTO MyTable VALUES (value, ROUND(dbms_random.value(1,10000)));
@@ -67,7 +67,7 @@ begin
  update_operation(10001,101);
 end;
 
-SELECT * FROM myTable;
+SELECT * FROM MyTable;
 
 CREATE OR REPLACE FUNCTION yearly_salary(month_reward REAL, proceent number) RETURN VARCHAR IS
 reward REAL;
