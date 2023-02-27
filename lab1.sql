@@ -43,19 +43,19 @@ SELECT gener_value(3) from DUAL;
 CREATE OR REPLACE PROCEDURE insert_operation (input_id IN number, input_val IN number) IS
 BEGIN
    INSERT INTO MyTable(id, val) VALUES (input_id, input_val);
-   EXCEPTION WHEN OTHER THEN dbms_output.put_line('error');
+   EXCEPTION WHEN OTHERS THEN dbms_output.put_line('error');
 end;
 
 CREATE OR REPLACE PROCEDURE delete_operation (input_id IN number) IS
 BEGIN
    DELETE FROM MyTable WHERE id=input_id;
-   EXCEPTION WHEN OTHER THEN dbms_output.put_line('error');
+   EXCEPTION WHEN OTHERS THEN dbms_output.put_line('error');
 end;
 
 CREATE OR REPLACE PROCEDURE update_operation (input_id IN number, input_val IN number) IS
 BEGIN
    UPDATE MyTable SET val=input_val WHERE id=input_id;
-   EXCEPTION WHEN OTHER THEN dbms_output.put_line('error');
+   EXCEPTION WHEN OTHERS THEN dbms_output.put_line('error');
 end;
 
 begin
