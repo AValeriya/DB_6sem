@@ -6,7 +6,7 @@ CREATE TABLE MyTable
 DECLARE 
     value number := 0;
 BEGIN
-    WHILE value <= 10000
+    WHILE value < 10000
     LOOP
         value := value + 1;
         INSERT INTO MyTable VALUES (value, ROUND(dbms_random.value(1,10000)));
