@@ -33,57 +33,58 @@ INSERT INTO groupes(id,name,c_val) VALUES (5, '053505', 1);
 
 SELECT * from groupes;
 
-CREATE OR REPLACE TRIGGER uniqueStudentsId
-BEFORE INSERT OR UPDATE OF id ON students
-FOR EACH ROW
-DECLARE 
-    n_id NUMBER;
-BEGIN
-    SELECT count(*) INTO n_id FROM students WHERE students.id =: new.id;
-    IF n_id > 0 THEN raise_application_error(-20000, 'Id should be unique!');
-    ELSE dbms_output.put_line(' Done');
-    END IF;
-END;
+create or replace trigger StudentUniqueId
+    before insert on students
+    for each row
+declare
+    custom_exception exception;
+    pragma exception_init(custom_exception, -20042);
+    cursor students_id is
+        select id from students;
+begin
+    for us_id in students_id
+    loop
+        if (us_id.id = :new.id) then
+            raise_application_error(-20042, 'it is not unique id!');
+        end if;
+    end loop;
+end;
 
-CREATE OR REPLACE TRIGGER autoIncrement
-BEFORE INSERT ON students
-FOR EACH ROW
-DECLARE 
-    max_id NUMBER := 0;
-BEGIN
-    SELECT max(students.id) INTO max_id FROM students;
-    IF max_id is null THEN max_id := 0;
-    END IF;
-    :new.id := max_id + 1;
-END;
+create or replace trigger GroupUniqueId
+    before insert on groupes 
+    for each row
+declare
+    custom_exception exception;
+    pragma exception_init(custom_exception, -20042);
+    cursor groupes_id is
+        select id from groupes;
+begin
+    for ug_id in groupes_id
+    loop
+        if (ug_id.id = :new.id) then
+            raise_application_error(-20042, 'it is not unique id!');
+        end if;
+    end loop;
+end;
 
-CREATE OR REPLACE TRIGGER uniqueGroupName
-BEFORE INSERT OR UPDATE ON groupes
-FOR EACH ROW
-DECLARE 
-    n_name NUMBER;
-BEGIN
-    SELECT count(*) INTO n_name FROM groupes WHERE groupes.name =: new.name;
-    IF n_name > 0 THEN raise_application_error(-20000, 'Id should be unique!');
-    ELSE dbms_output.put_line(' Done');
-    END IF;
-END;
+begin
+    insert into groupes(id, name, c_val) values(6, '053507', 0);
+    insert into groupes(id, name, c_val) values(6, '0535056', 0);
+end;
 
-INSERT INTO students(name,group_id) VALUES ('Roma', 5);
+begin
+    insert into groupes(id, name, c_val) values(6, '053506', 0);
+end;
 
-CREATE OR REPLACE TRIGGER autoIncrementGroups
-BEFORE INSERT ON groupes
-FOR EACH ROW
-DECLARE 
-    max_id NUMBER := 0;
-BEGIN
-    SELECT max(groupes.id) INTO max_id FROM groupes;
-    IF max_id is null THEN max_id := 0;
-    END IF;
-    :new.id := max_id + 1;
-END;
+begin
+    insert into students(id, name, group_id) values(12, 'Nina', 1);
+    insert into students(id, name, group_id) values(12, 'Anton', 5);
+end;
 
-INSERT INTO groupes(name,c_val) VALUES ('050502', 0);
+begin
+    insert into students(id, name, group_id) values(13, 'Nina', 6);
+    insert into students(id, name, group_id) values(14, 'Anton', 6);
+end;
 
 CREATE OR REPLACE TRIGGER cascadeDelete
 BEFORE DELETE ON groupes
