@@ -84,3 +84,15 @@ BEGIN
 END;
 
 INSERT INTO groupes(name,c_val) VALUES ('050502', 0);
+
+CREATE OR REPLACE TRIGGER cascadeDelete
+BEFORE DELETE ON groupes
+FOR EACH ROW
+BEGIN
+    DELETE FROM students WHERE group_id=:old.id;
+END;
+
+select * from students;
+INSERT INTO students(name,group_id) VALUES ('Lera', 6);
+DELETE FROM groupes WHERE id=6;
+select * from students;
