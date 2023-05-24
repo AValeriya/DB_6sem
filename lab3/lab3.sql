@@ -826,4 +826,3 @@ CREATE TABLE dev.test3(
 ALTER TABLE dev.test2 ADD CONSTRAINT fk_test2 FOREIGN KEY (test_id) REFERENCES dev.test3(id);
 ALTER TABLE dev.test1 ADD CONSTRAINT fk_test1 FOREIGN KEY (testik_id) REFERENCES dev.test2(id);
 ALTER TABLE dev.test3 ADD CONSTRAINT fk_test3 FOREIGN KEY (tes_id) REFERENCES  dev.test1(id);
-ALTER TABLE c##dev.test3 DROP CONSTRAINT fk_test3;
