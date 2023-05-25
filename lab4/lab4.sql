@@ -526,3 +526,68 @@ FUNCTION parse_simple_condition(json_query_string JSON_OBJECT_T,
         RETURN NULL;
     END parse_JSON_to_SQL;
 END json_parser;
+
+
+
+-------------------------------------------------------------------------------------------
+
+
+
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "DML": {
+        "type": "insert",
+        "tab_name": "table1",
+        "columns": ["id","name","age"],
+        "values": ["1","Lera","12"]
+    }
+}';
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(json_parser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
+
+
+
+------------------------------------------------------------------------------------------
+
+DECLARE
+    json_content VARCHAR2(32000) := '{
+    "select": {
+        "what": ["name","age","id"],
+        "from": ["table1"],
+        "where": {
+            "comparison": {
+                "col": "id",
+                "comparator": "in",
+                "value": {
+                    "select": {
+                        "what": ["id"],
+                        "from": ["table2"],
+                        "where": {
+                            "and": [
+                                {
+                                    "comparison": {
+                                        "col": "name",
+                                        "comparator": "like",
+                                        "value": "%a%"
+                                    }
+                                },
+                                {
+                                    "between": {
+                                        "col": "id",
+                                        "min": 12,
+                                        "max": 20
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}';
+BEGIN
+    DBMS_OUTPUT.PUT_LINE(json_parser.parse_JSON_to_SQL(JSON_OBJECT_T(json_content)));
+END;
